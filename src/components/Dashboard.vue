@@ -12,19 +12,23 @@
       />
     </div>
     <button v-on:click="toggleEntryForm">New Entry</button>
+    <EntryForm v-if="formVisible" :addEntry="addEntry" />
   </div>
 </template>
 
 <script>
 import DayEntry from "./DayEntry.vue";
+import EntryForm from "./EntryForm.vue";
 export default {
   name: "Dashboard",
   components: {
-    DayEntry
+    DayEntry,
+    EntryForm
   },
   data() {
     return {
       text: "Component",
+      formVisible: false,
       seeds: [
         {
           date: "Jan 1, 2019",
@@ -74,7 +78,7 @@ export default {
   },
   methods: {
     toggleEntryForm() {
-      console.log("toggleEntryForm");
+      this.formVisible = !this.formVisible;
     },
     addEntry() {
       console.log("adding entry!");
