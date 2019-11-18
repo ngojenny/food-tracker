@@ -11,8 +11,8 @@
         :notes="seed.notes"
       />
     </div>
-    <button v-on:click="toggleEntryForm">New Entry</button>
-    <EntryForm v-if="formVisible" :addEntry="addEntry" />
+    <button type="button" v-on:click="toggleEntryForm">New Entry</button>
+    <EntryForm v-if="formVisible" @send-entry="addEntry" />
   </div>
 </template>
 
@@ -80,8 +80,9 @@ export default {
     toggleEntryForm() {
       this.formVisible = !this.formVisible;
     },
-    addEntry() {
-      console.log("adding entry!");
+    addEntry(val) {
+      console.log("adding entry!", val);
+      this.seeds.push(val);
     }
   }
 };
