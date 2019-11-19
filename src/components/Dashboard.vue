@@ -1,8 +1,10 @@
 <template>
   <div class="wrapper">
-    <h2>Dashboard {{text}}</h2>
-    <div v-for="seed in seeds" v-bind:key="seed.date">
+    <h1>Weekly Overview</h1>
+    <div class="card-container">
       <DayEntry
+        v-for="seed in seeds"
+        v-bind:key="seed.date"
         :date="seed.date"
         :foods="seed.foods"
         :gut="seed.gut"
@@ -27,7 +29,6 @@ export default {
   },
   data() {
     return {
-      text: "Component",
       formVisible: false,
       seeds: [
         {
@@ -87,3 +88,15 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+h1 {
+  letter-spacing: 1px;
+  font-weight: 700;
+  font-size: 4rem;
+}
+.card-container {
+  display: flex;
+  justify-content: space-between;
+}
+</style>

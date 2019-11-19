@@ -175,11 +175,19 @@ input::-moz-focus-inner {
   box-sizing: border-box;
 }
 
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background-image: linear-gradient(to top right, #fae0d9 0%, #ffe7ff 100%);
+  font-size: 1.6rem;
+  font-family: "Open Sans", sans-serif;
+}
+
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
 }
@@ -188,6 +196,14 @@ input::-moz-focus-inner {
   max-width: 1280px;
   margin: 0 auto;
   width: 80%;
-  border: 1px solid tomato;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Playfair Display", serif;
 }
 </style>

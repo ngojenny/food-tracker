@@ -7,8 +7,8 @@
     <p>
       <span class="entry-label">food:</span>
     </p>
-    <ul v-for="food in foods" v-bind:key="food">
-      <li>{{food}}</li>
+    <ul>
+      <li v-for="food in foods" v-bind:key="food">{{food}}</li>
     </ul>
     <p>
       <span class="entry-label">gut:</span>
@@ -21,8 +21,8 @@
     <p>
       <span class="entry-label">tags:</span>
     </p>
-    <ul v-for="tag in tags" v-bind:key="tag">
-      <li>{{tag}}</li>
+    <ul>
+      <li v-for="tag in tags" v-bind:key="tag">{{tag}}</li>
     </ul>
     <p>
       <span class="entry-label">notes:</span>
@@ -36,3 +36,23 @@ export default {
   props: ["date", "foods", "gut", "skin", "tags", "notes"]
 };
 </script>
+
+<style scoped>
+.card {
+  border: 1px solid #ffffff;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 15px;
+  width: calc(33.3% - 25px);
+}
+
+.entry-label {
+  font-weight: 700;
+  text-transform: capitalize;
+  margin-right: 5px;
+}
+
+p,
+ul {
+  margin-bottom: 25px;
+}
+</style>
