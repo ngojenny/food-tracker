@@ -9,7 +9,19 @@
       </ul>
     </div>
     <input type="text" id="foodItem" v-on:keyup="updateField" />
-    <button type="button" v-on:click="addFoodItem">+</button>
+    <button type="button" v-on:click="addListItem" data-item="foodItem">+</button>
+    <label for="gut">Gut:</label>
+    <input type="text" id="gut" v-on:keyup="updateField" />
+    <label for="skin">Skin:</label>
+    <input type="text" id="skin" v-on:keyup="updateField" />
+    <label for="tags">Tags:</label>
+    <div v-if="currentEntry.tags.length > 0">
+      <ul v-for="tag in currentEntry.tags" v-bind:key="tag">
+        <li>{{tag}}</li>
+      </ul>
+    </div>
+    <input type="text" id="tagItem" v-on:keyup="updateField" />
+    <button type="button" v-on:click="addListItem" data-item="tagItem">+</button>
     <button type="submit">Submit</button>
   </form>
 </template>
@@ -25,6 +37,7 @@ export default {
         foods: [],
         gut: "",
         skin: "",
+        tagItem: "",
         tags: [],
         notes: ""
       }
@@ -40,6 +53,7 @@ export default {
       console.log("calling sendEntry", this.currentEntry);
       const massagedEntry = Object.assign({}, this.currentEntry);
       delete massagedEntry.foodItem;
+      delete massagedEntry.tagItem;
       this.$emit("send-entry", this.currentEntry);
       this.currentEntry = {
         date: "",
@@ -51,10 +65,13 @@ export default {
         notes: ""
       };
     },
-    addFoodItem() {
-      console.log("adding food item");
-      this.currentEntry.foods.push(this.currentEntry.foodItem);
-      this.currentEntry.foodItem = "";
+    addListItem(e) {
+      const item = e.target.dataset.item;
+      const val = e.target.value;
+
+      const pluralKey = item.split("Item")[0] + "s";
+
+      this.currentEntry[pluralKey].push(this.currentEntry[item]);
     }
   }
 };
