@@ -8,7 +8,7 @@
       <span class="entry-label">food:</span>
     </p>
     <ul>
-      <li v-for="food in foods" v-bind:key="food">{{food}}</li>
+      <li v-for="food in foods" v-bind:key="food.id">{{food.description}}</li>
     </ul>
     <p>
       <span class="entry-label">gut:</span>
@@ -22,7 +22,7 @@
       <span class="entry-label">tags:</span>
     </p>
     <ul>
-      <li v-for="tag in tags" v-bind:key="tag">{{tag}}</li>
+      <li v-for="tag in tags" v-bind:key="tag.id">{{tag.description}}</li>
     </ul>
     <p>
       <span class="entry-label">notes:</span>
@@ -42,7 +42,8 @@ export default {
   border: 2px solid #ffffff;
   background: rgba(255, 255, 255, 0.4);
   padding: 15px;
-  width: calc(33.3% - 25px);
+  width: calc(33.3% - 15px);
+  margin-bottom: 25px;
 }
 
 .entry-label {
