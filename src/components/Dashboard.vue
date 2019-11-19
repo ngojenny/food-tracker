@@ -116,6 +116,7 @@ h1 {
   border: none;
   padding: 5px 10px;
   font-size: 1.8rem;
+  background: #ffffff;
 }
 
 header {

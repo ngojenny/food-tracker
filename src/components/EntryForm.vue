@@ -16,7 +16,7 @@
           type="text"
           id="foodItem"
           v-model="currentEntry.foodItem"
-          v-on:keyup.enter="addListItem"
+          v-on:keydown.enter="addListItem"
         />
         <button class="btn-add-item" type="button" v-on:click="addListItem" data-item="foodItem">+</button>
       </div>
@@ -35,7 +35,7 @@
           type="text"
           id="tagItem"
           v-model="currentEntry.tagItem"
-          v-on:keyup.enter="addListItem"
+          v-on:keydown.enter="addListItem"
         />
         <button class="btn-add-item" type="button" v-on:click="addListItem" data-item="tagItem">+</button>
       </div>
@@ -62,7 +62,7 @@ export default {
     };
   },
   methods: {
-    sendEntry() {
+    sendEntry(e) {
       const massagedEntry = Object.assign({}, this.currentEntry);
       delete massagedEntry.foodItem;
       delete massagedEntry.tagItem;
@@ -79,6 +79,7 @@ export default {
       this.closeModal();
     },
     addListItem(e) {
+      e.preventDefault();
       let item = e.target.dataset.item;
       if (!item) {
         item = e.target.id;
@@ -92,6 +93,8 @@ export default {
 
       this.currentEntry[pluralKey].push(itemObj);
 
+      this.currentEntry[item] = "";
+
       console.log("this.currentEntry", this.currentEntry);
     },
     closeModal() {
@@ -103,9 +106,11 @@ export default {
 
 <style scoped>
 .modal {
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
+  bottom: 0;
+  right: 0;
   width: 100%;
   height: 100%;
   padding: 1px;
@@ -167,5 +172,10 @@ input {
   margin-right: -5px;
   line-height: 0;
   font-size: 2.8rem;
+}
+
+ul {
+  margin-top: 30px;
+  padding-left: 10px;
 }
 </style>
