@@ -183,13 +183,15 @@ body {
   background-image: linear-gradient(to top right, #fae0d9 0%, #ffe7ff 100%);
   font-size: 1.6rem;
   font-family: "Open Sans", sans-serif;
+  position: relative;
+  min-height: 100vh;
 }
 
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
+  padding: 30px 0;
 }
 
 .wrapper {

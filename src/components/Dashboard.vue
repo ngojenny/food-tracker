@@ -1,6 +1,9 @@
 <template>
   <div class="wrapper">
-    <h1>Weekly Overview</h1>
+    <header>
+      <h1>Weekly Overview</h1>
+      <button class="add-button" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
+    </header>
     <div class="card-container">
       <DayEntry
         v-for="seed in seeds"
@@ -13,8 +16,7 @@
         :notes="seed.notes"
       />
     </div>
-    <button type="button" v-on:click="toggleEntryForm">New Entry</button>
-    <EntryForm v-if="formVisible" @send-entry="addEntry" />
+    <EntryForm v-if="formVisible" @send-entry="addEntry" @close-modal="toggleEntryForm" />
   </div>
 </template>
 
@@ -97,6 +99,18 @@ h1 {
 }
 .card-container {
   display: flex;
+  justify-content: space-between;
+}
+
+.add-button {
+  border: none;
+  padding: 5px 10px;
+  font-size: 1.8rem;
+}
+
+header {
+  display: flex;
+  align-items: baseline;
   justify-content: space-between;
 }
 </style>

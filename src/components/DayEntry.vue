@@ -39,7 +39,7 @@ export default {
 
 <style scoped>
 .card {
-  border: 1px solid #ffffff;
+  border: 2px solid #ffffff;
   background: rgba(255, 255, 255, 0.4);
   padding: 15px;
   width: calc(33.3% - 25px);
@@ -53,6 +53,10 @@ export default {
 
 p,
 ul {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
+}
+
+ul {
+  margin-top: 0;
 }
 </style>
