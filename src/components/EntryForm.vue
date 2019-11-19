@@ -1,6 +1,6 @@
 <template>
   <div v-on:click="closeModal" class="modal">
-    <form v-on:submit.prevent="sendEntry">
+    <form v-on:click.stop v-on:submit.prevent="sendEntry">
       <button v-on:click="closeModal" class="btn-close" type="button">x</button>
       <label for="date">Date:</label>
       <input type="text" id="date" v-on:keyup="updateField" />
