@@ -76,6 +76,7 @@ export default {
         tags: [],
         notes: ""
       };
+      this.closeModal();
     },
     addListItem(e) {
       let item = e.target.dataset.item;

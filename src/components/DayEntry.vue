@@ -42,8 +42,16 @@ export default {
   border: 2px solid #ffffff;
   background: rgba(255, 255, 255, 0.4);
   padding: 15px;
-  width: calc(33.3% - 15px);
-  margin-bottom: 25px;
+  width: calc((100% - 40px) / 3);
+  margin: 10px;
+}
+
+.card:nth-of-type(3n + 1) {
+  margin-left: 0;
+}
+
+.card:nth-of-type(3n) {
+  margin-right: 0;
 }
 
 .entry-label {

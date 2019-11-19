@@ -108,7 +108,7 @@ h1 {
 }
 .card-container {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   flex-wrap: wrap;
 }
 
