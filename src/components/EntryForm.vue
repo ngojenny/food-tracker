@@ -7,8 +7,8 @@
       <input type="text" id="date" v-model="currentEntry.date" />
       <label for="foodItem">Food:</label>
       <div v-if="currentEntry.foods.length > 0">
-        <ul v-for="food in currentEntry.foods" v-bind:key="food.id">
-          <li>{{food.description}}</li>
+        <ul>
+          <li v-for="food in currentEntry.foods" v-bind:key="food.id">{{food.description}}</li>
         </ul>
       </div>
       <div class="field-container">
@@ -26,8 +26,8 @@
       <input type="text" id="skin" v-model="currentEntry.skin" />
       <label for="tags">Tags:</label>
       <div v-if="currentEntry.tags.length > 0">
-        <ul v-for="tag in currentEntry.tags" v-bind:key="tag.id">
-          <li>{{tag.description}}</li>
+        <ul>
+          <li v-for="tag in currentEntry.tags" v-bind:key="tag.id">{{tag.description}}</li>
         </ul>
       </div>
       <div class="field-container">
@@ -157,6 +157,10 @@ input {
   position: absolute;
   top: 20px;
   right: 20px;
+  background: none;
+  font-size: 2.3rem;
+  transform: scaleX(1.2);
+  border: none;
 }
 
 .field-container {
@@ -177,5 +181,16 @@ input {
 ul {
   margin-top: 30px;
   padding-left: 10px;
+}
+
+button[type="submit"] {
+  margin: 10px auto;
+  background: #ffffff;
+  border: none;
+  padding: 5px 20px;
+  border-left: 2px solid #fae0d9;
+  border-bottom: 2px solid #fae0d9;
+  border-right: 2px solid #ffe7ff;
+  border-top: 2px solid #ffe7ff;
 }
 </style>

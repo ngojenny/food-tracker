@@ -4,19 +4,21 @@
       <h1>Weekly Overview</h1>
       <button class="add-button" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
     </header>
-    <div class="card-container">
-      <DayEntry
-        v-for="seed in seeds"
-        v-bind:key="seed.date"
-        :date="seed.date"
-        :foods="seed.foods"
-        :gut="seed.gut"
-        :skin="seed.skin"
-        :tags="seed.tags"
-        :notes="seed.notes"
-      />
-    </div>
-    <EntryForm v-if="formVisible" @send-entry="addEntry" @close-modal="toggleEntryForm" />
+    <main>
+      <div class="card-container">
+        <DayEntry
+          v-for="seed in seeds"
+          v-bind:key="seed.date"
+          :date="seed.date"
+          :foods="seed.foods"
+          :gut="seed.gut"
+          :skin="seed.skin"
+          :tags="seed.tags"
+          :notes="seed.notes"
+        />
+      </div>
+      <EntryForm v-if="formVisible" @send-entry="addEntry" @close-modal="toggleEntryForm" />
+    </main>
   </div>
 </template>
 
