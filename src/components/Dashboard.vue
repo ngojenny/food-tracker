@@ -3,12 +3,15 @@
     <header>
       <h1>Weekly Overview</h1>
       <button class="add-button" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
+      <pre>
+        {{showEntriesMatchingSearchQuery}}
+      </pre>
     </header>
     <main>
-      <FilterSortBar :entries="entries" />
+      <FilterSortBar :entries="entries" @search-query="searchQuery" />
       <div class="card-container">
         <DayEntry
-          v-for="entry in entries"
+          v-for="entry in showEntriesMatchingSearchQuery"
           v-bind:key="entry.date"
           :date="entry.date"
           :foods="entry.foods"
@@ -37,6 +40,7 @@ export default {
   data() {
     return {
       formVisible: false,
+      searchTerm: "",
       entries: [
         {
           date: "Jan 1, 2019",
@@ -100,6 +104,36 @@ export default {
     addEntry(val) {
       console.log("adding entry!", val);
       this.entries.push(val);
+    },
+    searchQuery(query) {
+      console.log("search query", query);
+      this.searchTerm = query;
+    }
+  },
+  computed: {
+    showEntriesMatchingSearchQuery: function() {
+      if (this.searchTerm.length > 0) {
+        const matchedEntries = [];
+
+        this.entries.forEach(entry => {
+          for (let key in entry) {
+            if (entry[key].includes(this.searchTerm)) {
+              matchedEntries.push(entry);
+            }
+
+            if (Array.isArray(entry[key])) {
+              entry[key].forEach(item => {
+                if (item.description.includes(this.searchTerm)) {
+                  matchedEntries.push(entry);
+                }
+              });
+            }
+          }
+        });
+        return matchedEntries;
+      } else {
+        return this.entries;
+      }
     }
   }
 };
