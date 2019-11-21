@@ -96,7 +96,15 @@ export default {
       ]
     };
   },
+  mounted: function() {
+    this.$nextTick(function() {
+      this.getAllEntriesFromDatabase();
+    });
+  },
   methods: {
+    getAllEntriesFromDatabase() {
+      console.log("gonna do some firebase things");
+    },
     toggleEntryForm() {
       this.formVisible = !this.formVisible;
     },
