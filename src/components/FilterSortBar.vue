@@ -15,12 +15,12 @@
           <option v-for="tag in allTagItems" v-bind:key="tag" :value="tag">{{tag}}</option>
         </select>
       </div>
-      <button type="submit">filter</button>
+      <button class="btn" type="submit">filter</button>
     </form>
     <form v-on:submit.prevent="searchQuery" class="search">
       <label for="search" class="visuallyhidden">Search</label>
       <input type="search" placeholder="Search" v-model="search" />
-      <button type="submit">Search</button>
+      <button class="btn" type="submit">Search</button>
     </form>
     <!-- <pre>
       {{allFoodItems}}
@@ -78,5 +78,19 @@ export default {
 .filter {
   display: flex;
   align-items: baseline;
+}
+
+select {
+  appearance: none;
+  background: transparent;
+  border-radius: 0px;
+  border: none;
+  border-bottom: 1px solid #2c3e50;
+  background: url("../assets/caret-down-solid.svg");
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-size: 12px;
+  padding: 5px;
+  margin: 0 5px;
 }
 </style>

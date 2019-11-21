@@ -39,7 +39,7 @@
         />
         <button class="btn-add-item" type="button" v-on:click="addListItem" data-item="tagItem">+</button>
       </div>
-      <button type="submit">Submit</button>
+      <button class="btn" type="submit">Submit</button>
     </form>
   </div>
 </template>
@@ -185,12 +185,5 @@ ul {
 
 button[type="submit"] {
   margin: 10px auto;
-  background: #ffffff;
-  border: none;
-  padding: 5px 20px;
-  border-left: 2px solid #fae0d9;
-  border-bottom: 2px solid #fae0d9;
-  border-right: 2px solid #ffe7ff;
-  border-top: 2px solid #ffe7ff;
 }
 </style>

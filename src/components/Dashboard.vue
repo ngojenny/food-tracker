@@ -2,7 +2,7 @@
   <div class="wrapper">
     <header>
       <h1>Weekly Overview</h1>
-      <button class="add-button" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
+      <button class="btn btn-add" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
     </header>
     <main>
       <FilterSortBar :entries="entries" @search-query="searchQuery" @add-filters="addFilters" />
@@ -111,13 +111,10 @@ export default {
   },
   computed: {
     showEntriesMatchingFilterCritera: function() {
-      console.log("calling");
       const filterCriteria = [].concat(...this.filters);
       if (this.searchTerm.length > 0 && this.filters.indexOf(this.searchTerm)) {
         filterCriteria.push(this.searchTerm);
       }
-
-      console.log("filtercriteria", filterCriteria);
 
       if (filterCriteria.length > 0) {
         const matchedEntries = [];
@@ -134,8 +131,6 @@ export default {
                 }
 
                 if (Array.isArray(entry[key])) {
-                  console.log("second push", itemIndex, matchedEntries);
-
                   entry[key].forEach(item => {
                     if (item.description.includes(criteria)) {
                       matchedEntries.push(entry);
@@ -166,13 +161,6 @@ h1 {
   display: flex;
   /* justify-content: space-between; */
   flex-wrap: wrap;
-}
-
-.add-button {
-  border: none;
-  padding: 5px 10px;
-  font-size: 1.8rem;
-  background: #ffffff;
 }
 
 header {

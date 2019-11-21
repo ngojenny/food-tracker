@@ -221,4 +221,14 @@ h5,
 h6 {
   font-family: "Playfair Display", serif;
 }
+
+.btn {
+  background: #ffffff;
+  border: none;
+  padding: 5px 20px;
+  border-left: 2px solid #fae0d9;
+  border-bottom: 2px solid #fae0d9;
+  border-right: 2px solid #ffe7ff;
+  border-top: 2px solid #ffe7ff;
+}
 </style>
