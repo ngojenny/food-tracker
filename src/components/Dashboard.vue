@@ -3,15 +3,12 @@
     <header>
       <h1>Weekly Overview</h1>
       <button class="add-button" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
-      <pre>
-        {{showEntriesMatchingSearchQuery}}
-      </pre>
     </header>
     <main>
-      <FilterSortBar :entries="entries" @search-query="searchQuery" />
+      <FilterSortBar :entries="entries" @search-query="searchQuery" @add-filters="addFilters" />
       <div class="card-container">
         <DayEntry
-          v-for="entry in showEntriesMatchingSearchQuery"
+          v-for="entry in showEntriesMatchingFilterCritera"
           v-bind:key="entry.date"
           :date="entry.date"
           :foods="entry.foods"
@@ -41,6 +38,7 @@ export default {
     return {
       formVisible: false,
       searchTerm: "",
+      filters: [],
       entries: [
         {
           date: "Jan 1, 2019",
@@ -102,34 +100,53 @@ export default {
       this.formVisible = !this.formVisible;
     },
     addEntry(val) {
-      console.log("adding entry!", val);
       this.entries.push(val);
     },
     searchQuery(query) {
-      console.log("search query", query);
       this.searchTerm = query;
+    },
+    addFilters(filters) {
+      this.filters = filters.filter(item => item !== null);
     }
   },
   computed: {
-    showEntriesMatchingSearchQuery: function() {
-      if (this.searchTerm.length > 0) {
+    showEntriesMatchingFilterCritera: function() {
+      console.log("calling");
+      const filterCriteria = [].concat(...this.filters);
+      if (this.searchTerm.length > 0 && this.filters.indexOf(this.searchTerm)) {
+        filterCriteria.push(this.searchTerm);
+      }
+
+      console.log("filtercriteria", filterCriteria);
+
+      if (filterCriteria.length > 0) {
         const matchedEntries = [];
-
-        this.entries.forEach(entry => {
-          for (let key in entry) {
-            if (entry[key].includes(this.searchTerm)) {
-              matchedEntries.push(entry);
-            }
-
-            if (Array.isArray(entry[key])) {
-              entry[key].forEach(item => {
-                if (item.description.includes(this.searchTerm)) {
+        filterCriteria.forEach(criteria => {
+          this.entries.forEach(entry => {
+            // for now check for unique date, will need to generate some UID later
+            const itemIndex = matchedEntries.findIndex(item => {
+              return item.date === entry.date;
+            });
+            if (itemIndex === -1) {
+              for (let key in entry) {
+                if (entry[key].includes(criteria)) {
                   matchedEntries.push(entry);
                 }
-              });
+
+                if (Array.isArray(entry[key])) {
+                  console.log("second push", itemIndex, matchedEntries);
+
+                  entry[key].forEach(item => {
+                    if (item.description.includes(criteria)) {
+                      matchedEntries.push(entry);
+                    }
+                  });
+                }
+              }
             }
-          }
+          });
         });
+
         return matchedEntries;
       } else {
         return this.entries;
