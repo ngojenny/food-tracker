@@ -37,7 +37,6 @@ export default {
   computed: {
     formattedDate: function() {
       const { date } = this;
-      console.log(typeof date);
       if (typeof date === "string") {
         return date;
       }

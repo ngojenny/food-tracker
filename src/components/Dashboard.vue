@@ -98,6 +98,7 @@ export default {
   },
   methods: {
     toggleEntryForm() {
+      console.log("db", db);
       this.formVisible = !this.formVisible;
     },
     addEntry(val) {

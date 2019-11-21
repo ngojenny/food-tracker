@@ -46,6 +46,7 @@
 
 <script>
 import DatePicker from "v-calendar/lib/components/date-picker.umd";
+import { db } from "./../firebase";
 export default {
   props: ["addEntry"],
   components: {
