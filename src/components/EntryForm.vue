@@ -4,7 +4,7 @@
       <h2>New Entry</h2>
       <button v-on:click="closeModal" class="btn-close" type="button">x</button>
       <label for="date">Date:</label>
-      <input type="text" id="date" v-model="currentEntry.date" />
+      <DatePicker id="date" class="datepicker" v-model="currentEntry.date" />
       <label for="foodItem">Food:</label>
       <div v-if="currentEntry.foods.length > 0">
         <ul>
@@ -45,8 +45,12 @@
 </template>
 
 <script>
+import DatePicker from "v-calendar/lib/components/date-picker.umd";
 export default {
   props: ["addEntry"],
+  components: {
+    DatePicker
+  },
   data() {
     return {
       currentEntry: {
@@ -185,5 +189,11 @@ ul {
 
 button[type="submit"] {
   margin: 10px auto;
+}
+
+.datepicker {
+  width: 100%;
+  border-radius: 0;
+  border-bottom: 1px dotted #2c3e50;
 }
 </style>

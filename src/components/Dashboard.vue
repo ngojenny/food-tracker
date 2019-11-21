@@ -7,6 +7,7 @@
     <main>
       <FilterSortBar :entries="entries" @search-query="searchQuery" @add-filters="addFilters" />
       <div class="card-container">
+        <!-- need to use something else for key -->
         <DayEntry
           v-for="entry in showEntriesMatchingFilterCritera"
           v-bind:key="entry.date"

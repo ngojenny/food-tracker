@@ -2,7 +2,7 @@
   <div class="card">
     <p>
       <span class="entry-label">date:</span>
-      {{date}}
+      {{ formattedDate }}
     </p>
     <p>
       <span class="entry-label">food:</span>
@@ -33,7 +33,24 @@
 
 <script>
 export default {
-  props: ["date", "foods", "gut", "skin", "tags", "notes"]
+  props: ["date", "foods", "gut", "skin", "tags", "notes"],
+  computed: {
+    formattedDate: function() {
+      const { date } = this;
+      console.log(typeof date);
+      if (typeof date === "string") {
+        return date;
+      }
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      };
+      const formattedDate = date.toLocaleString("en-US", options);
+      return formattedDate;
+    }
+  }
 };
 </script>
 
