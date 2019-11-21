@@ -68,10 +68,12 @@ export default {
   },
   methods: {
     sendEntry(e) {
+      const entryRef = db.collection("entries").doc();
+
       const massagedEntry = Object.assign({}, this.currentEntry);
       delete massagedEntry.foodItem;
       delete massagedEntry.tagItem;
-      this.$emit("send-entry", this.currentEntry);
+      this.$emit("send-entry", massagedEntry);
       this.currentEntry = {
         date: "",
         foodItem: "",
@@ -81,6 +83,8 @@ export default {
         tags: [],
         notes: ""
       };
+
+      entryRef.set(massagedEntry);
       this.closeModal();
     },
     addListItem(e) {
