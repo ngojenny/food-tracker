@@ -105,8 +105,6 @@ export default {
       this.currentEntry[pluralKey].push(itemObj);
 
       this.currentEntry[item] = "";
-
-      console.log("this.currentEntry", this.currentEntry);
     },
     closeModal() {
       this.$emit("close-modal");

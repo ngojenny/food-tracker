@@ -147,7 +147,10 @@ export default {
             });
             if (itemIndex === -1) {
               for (let key in entry) {
-                if (entry[key].includes(criteria)) {
+                if (
+                  typeof entry[key] === "string" &&
+                  entry[key].includes(criteria)
+                ) {
                   matchedEntries.push(entry);
                 }
 
