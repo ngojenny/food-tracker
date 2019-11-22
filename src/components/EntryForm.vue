@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       currentEntry: {
-        date: "",
+        date: new Date(),
         foodItem: "",
         foods: [],
         gut: "",
@@ -77,7 +77,7 @@ export default {
       delete massagedEntry.tagItem;
       this.$emit("database-updated");
       this.currentEntry = {
-        date: "",
+        date: new Date(),
         foodItem: "",
         foods: [],
         gut: "",

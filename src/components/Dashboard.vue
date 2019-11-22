@@ -141,9 +141,8 @@ export default {
         const matchedEntries = [];
         filterCriteria.forEach(criteria => {
           this.entries.forEach(entry => {
-            // for now check for unique date, will need to generate some UID later
             const itemIndex = matchedEntries.findIndex(item => {
-              return item.date === entry.date;
+              return item.id === entry.id;
             });
             if (itemIndex === -1) {
               for (let key in entry) {
@@ -165,6 +164,8 @@ export default {
             }
           });
         });
+
+        console.log("matchedEntries", matchedEntries);
 
         return matchedEntries;
       } else {
