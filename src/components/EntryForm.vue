@@ -39,6 +39,8 @@
         />
         <button class="btn-add-item" type="button" v-on:click="addListItem" data-item="tagItem">+</button>
       </div>
+      <label for="note">Note:</label>
+      <input type="text" id="note" v-model="currentEntry.notes" />
       <button class="btn" type="submit">Submit</button>
     </form>
   </div>
@@ -73,7 +75,7 @@ export default {
       const massagedEntry = Object.assign({}, this.currentEntry);
       delete massagedEntry.foodItem;
       delete massagedEntry.tagItem;
-      this.$emit("send-entry", massagedEntry);
+      this.$emit("database-updated");
       this.currentEntry = {
         date: "",
         foodItem: "",

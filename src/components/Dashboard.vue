@@ -10,7 +10,7 @@
         <!-- need to use something else for key -->
         <DayEntry
           v-for="entry in showEntriesMatchingFilterCritera"
-          v-bind:key="entry.date"
+          v-bind:key="entry.id"
           :date="entry.date"
           :foods="entry.foods"
           :gut="entry.gut"
@@ -19,7 +19,11 @@
           :notes="entry.notes"
         />
       </div>
-      <EntryForm v-if="formVisible" @send-entry="addEntry" @close-modal="toggleEntryForm" />
+      <EntryForm
+        v-if="formVisible"
+        @database-updated="getAllEntriesFromDatabase"
+        @close-modal="toggleEntryForm"
+      />
     </main>
   </div>
 </template>
@@ -105,24 +109,19 @@ export default {
   methods: {
     getAllEntriesFromDatabase() {
       const entriesRef = db.collection("entries");
-      console.log("gonna do some firebase things", entriesRef);
 
-      entriesRef
-        .limit(7)
-        .get()
-        .then(querySnapshot => {
-          const databaseEntries = [];
-          querySnapshot.forEach(doc => {
-            databaseEntries.push(doc.data());
-          });
-          this.entries = databaseEntries;
+      entriesRef.get().then(querySnapshot => {
+        const databaseEntries = [];
+        querySnapshot.forEach(doc => {
+          const entry = doc.data();
+          entry.id = doc.id;
+          databaseEntries.push(entry);
         });
+        this.entries = databaseEntries;
+      });
     },
     toggleEntryForm() {
       this.formVisible = !this.formVisible;
-    },
-    addEntry(val) {
-      this.entries.push(val);
     },
     searchQuery(query) {
       this.searchTerm = query;
@@ -181,7 +180,6 @@ h1 {
 }
 .card-container {
   display: flex;
-  /* justify-content: space-between; */
   flex-wrap: wrap;
 }
 
