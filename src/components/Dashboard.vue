@@ -28,6 +28,7 @@
 import DayEntry from "./DayEntry.vue";
 import EntryForm from "./EntryForm.vue";
 import FilterSortBar from "./FilterSortBar.vue";
+import { db } from "./../firebase";
 export default {
   name: "Dashboard",
   components: {
@@ -103,7 +104,19 @@ export default {
   },
   methods: {
     getAllEntriesFromDatabase() {
-      console.log("gonna do some firebase things");
+      const entriesRef = db.collection("entries");
+      console.log("gonna do some firebase things", entriesRef);
+
+      entriesRef
+        .limit(7)
+        .get()
+        .then(querySnapshot => {
+          const databaseEntries = [];
+          querySnapshot.forEach(doc => {
+            databaseEntries.push(doc.data());
+          });
+          this.entries = databaseEntries;
+        });
     },
     toggleEntryForm() {
       this.formVisible = !this.formVisible;
