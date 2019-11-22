@@ -46,7 +46,7 @@ export default {
         month: "long",
         day: "numeric"
       };
-      const formattedDate = date.toLocaleString("en-US", options);
+      const formattedDate = date.toDate().toLocaleString("en-US", options);
       return formattedDate;
     }
   }
