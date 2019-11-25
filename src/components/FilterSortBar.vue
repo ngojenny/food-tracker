@@ -80,7 +80,8 @@ export default {
   align-items: baseline;
 }
 
-select {
+select,
+input[type="search"] {
   appearance: none;
   background: transparent;
   border-radius: 0px;
@@ -92,5 +93,10 @@ select {
   background-size: 12px;
   padding: 5px;
   margin: 0 5px;
+}
+
+input[type="search"] {
+  background-image: url("../assets/search-solid.svg");
+  background-size: 15px;
 }
 </style>
