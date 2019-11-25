@@ -127,7 +127,7 @@ export default {
       this.searchTerm = query;
     },
     addFilters(filters) {
-      this.filters = filters.filter(item => item !== null);
+      this.filters = filters.filter(item => item !== null && item.length > 0);
     }
   },
   computed: {
@@ -138,25 +138,26 @@ export default {
       }
 
       if (filterCriteria.length > 0) {
-        const matchedEntries = [];
+        const matchedEntriesIds = [];
         filterCriteria.forEach(criteria => {
           this.entries.forEach(entry => {
-            const itemIndex = matchedEntries.findIndex(item => {
-              return item.id === entry.id;
+            const itemIndex = matchedEntriesIds.findIndex(item => {
+              return item === entry.id;
             });
             if (itemIndex === -1) {
+              // console.log("not in it");
               for (let key in entry) {
                 if (
                   typeof entry[key] === "string" &&
                   entry[key].includes(criteria)
                 ) {
-                  matchedEntries.push(entry);
+                  matchedEntriesIds.push(entry.id);
                 }
 
                 if (Array.isArray(entry[key])) {
                   entry[key].forEach(item => {
                     if (item.description.includes(criteria)) {
-                      matchedEntries.push(entry);
+                      matchedEntriesIds.push(entry.id);
                     }
                   });
                 }
@@ -165,7 +166,11 @@ export default {
           });
         });
 
-        console.log("matchedEntries", matchedEntries);
+        const matchedEntries = this.entries.filter(entry => {
+          if (matchedEntriesIds.indexOf(entry.id) !== -1) {
+            return true;
+          }
+        });
 
         return matchedEntries;
       } else {

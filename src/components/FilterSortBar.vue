@@ -4,14 +4,14 @@
       <div class="filter-dropdown">
         <label for="food">Food</label>
         <select name id="food" v-model="foodFilter">
-          <option>All</option>
+          <option value>All</option>
           <option v-for="food in allFoodItems" v-bind:key="food" :value="food">{{food}}</option>
         </select>
       </div>
       <div class="filter-dropdown">
         <label for="tags">Tags</label>
         <select name id="tag" v-model="tagFilter">
-          <option>All</option>
+          <option value>All</option>
           <option v-for="tag in allTagItems" v-bind:key="tag" :value="tag">{{tag}}</option>
         </select>
       </div>
