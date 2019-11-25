@@ -1,4 +1,5 @@
 const firebase = require("firebase");
+const firebaseui = require('firebaseui');
 require("firebase/firestore");
 
 const firebaseConfig = {
@@ -15,4 +16,5 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 export const db = firebase.firestore();
+export const ui = new firebaseui.auth.AuthUI(firebase.auth());
 export default firebase;

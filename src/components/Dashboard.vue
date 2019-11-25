@@ -32,7 +32,7 @@
 import DayEntry from "./DayEntry.vue";
 import EntryForm from "./EntryForm.vue";
 import FilterSortBar from "./FilterSortBar.vue";
-import { db } from "./../firebase";
+import { db, ui } from "./../firebase";
 export default {
   name: "Dashboard",
   components: {
@@ -104,6 +104,7 @@ export default {
   mounted: function() {
     this.$nextTick(function() {
       this.getAllEntriesFromDatabase();
+      console.log("ui", ui);
     });
   },
   methods: {
