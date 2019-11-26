@@ -156,12 +156,15 @@ export default {
         });
     },
     getAllEntriesFromDatabase() {
-      const privateEntriesRef = db
-        .collection("users")
-        .doc(this.userUID)
-        .collection("entries");
+      const entriesRef = db.collection("entries");
+      // const privateEntriesRef = db
+      //   .collection("users")
+      //   .doc(this.userUID)
+      //   .collection("entries");
 
-      privateEntriesRef.get().then(querySnapshot => {
+      // console.log(privateEntriesRef);
+
+      entriesRef.get().then(querySnapshot => {
         const databaseEntries = [];
         querySnapshot.forEach(doc => {
           const entry = doc.data();
@@ -233,11 +236,11 @@ export default {
     ...mapState({
       user: state => {
         return state.user;
-      },
-      userUID: state => {
-        console.log("trying to find userUID", state);
-        return state.user.user.uid;
       }
+      // userUID: state => {
+      //   console.log("trying to find userUID", state);
+      //   return state.user.user.uid;
+      // }
     })
   }
 };
