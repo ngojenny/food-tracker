@@ -25,9 +25,12 @@ const store = new Vuex.Store({
     increment(state, payload) {
       state.count += payload.amount
     },
-    updateUser(state, payload) {
+    logUserIn(state, payload) {
       console.log('mutating global state', payload)
       state.user = payload;
+    },
+    logUserOut(state) {
+      state.user = null;
     }
   },
   actions: {

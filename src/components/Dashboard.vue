@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import DayEntry from "./DayEntry.vue";
 import EntryForm from "./EntryForm.vue";
 import FilterSortBar from "./FilterSortBar.vue";
@@ -64,7 +64,6 @@ export default {
   },
   data() {
     return {
-      user: null,
       formVisible: false,
       searchTerm: "",
       filters: [],
@@ -136,8 +135,8 @@ export default {
       const uiConfig = {
         callbacks: {
           signInSuccessWithAuthResult(authResults, redirectUrl) {
-            self.user = authResults;
-            store.commit("updateUser", authResults);
+            // self.user = authResults;
+            store.commit("logUserIn", authResults);
             return true;
           }
         },
@@ -150,7 +149,7 @@ export default {
       ui.start("#firebaseui-auth-container", uiConfig);
     },
     logout() {
-      this.user = null;
+      store.commit("logUserOut");
     },
     getAllEntriesFromDatabase() {
       const entriesRef = db.collection("entries");
@@ -222,12 +221,11 @@ export default {
         return this.entries;
       }
     },
+    ...mapMutations(["logUserOut"]),
     ...mapState({
-      userObj: state => state.user,
-
-      userName: state => {
-        console.log("in username", state.user);
-        return state.user.displayName;
+      user: state => {
+        console.log("user mapstate", state.user);
+        return state.user;
       }
     })
   }
