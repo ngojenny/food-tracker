@@ -14,7 +14,6 @@
     </header>
     <main>
       <FilterSortBar :entries="entries" @search-query="searchQuery" @add-filters="addFilters" />
-      <Counter />
       <div class="card-container">
         <!-- need to use something else for key -->
         <DayEntry
@@ -49,7 +48,6 @@ import { mapState, mapMutations } from "vuex";
 import DayEntry from "./DayEntry.vue";
 import EntryForm from "./EntryForm.vue";
 import FilterSortBar from "./FilterSortBar.vue";
-import Counter from "./Counter.vue";
 import Greeting from "./Greeting.vue";
 import firebase, { db, ui } from "./../firebase";
 import store from "./../store";
@@ -59,7 +57,6 @@ export default {
     DayEntry,
     EntryForm,
     FilterSortBar,
-    Counter,
     Greeting
   },
   data() {
