@@ -3,9 +3,6 @@
     <header>
       <div class="header-top">
         <Greeting />
-        <pre>
-          {{userUID}}
-        </pre>
       </div>
       <div class="header-bottom">
         <h1>Weekly Overview</h1>
@@ -75,11 +72,12 @@ export default {
   },
   mounted: function() {
     this.$nextTick(function() {
-      this.login();
+      console.log("about to call login");
+      this.promptLogin();
     });
   },
   methods: {
-    login() {
+    promptLogin() {
       const self = this;
       const uiConfig = {
         callbacks: {
@@ -98,12 +96,14 @@ export default {
       ui.start("#firebaseui-auth-container", uiConfig);
     },
     logout() {
+      const self = this;
       firebase
         .auth()
         .signOut()
-        .then(function() {
+        .then(async function() {
           console.log("successfully logging out and updating store");
-          store.commit("logUserOut");
+          await store.commit("logUserOut");
+          self.promptLogin();
         })
         .catch(function(error) {
           console.log("error", error);
@@ -125,7 +125,6 @@ export default {
           const entry = doc.data();
           entry.id = doc.id;
           databaseEntries.push(entry);
-          console.log("ENTRY", entry);
         });
         this.entries = databaseEntries;
       });
@@ -193,7 +192,6 @@ export default {
         return state.user;
       },
       userUID: state => {
-        console.log("trying to find userUID", state.user);
         return state.user.user.uid;
       }
     })
