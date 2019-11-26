@@ -1,10 +1,15 @@
 <template>
   <div v-if="user" class="wrapper">
     <header>
-      <h1>Weekly Overview</h1>
-      <div class="btn-container">
-        <button class="btn btn-add" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
-        <button class="btn" v-on:click="logout">Log out</button>
+      <div class="header-top">
+        <Greeting />
+      </div>
+      <div class="header-bottom">
+        <h1>Weekly Overview</h1>
+        <div class="btn-container">
+          <button class="btn btn-add" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
+          <button class="btn" v-on:click="logout">Log out</button>
+        </div>
       </div>
     </header>
     <main>
@@ -40,18 +45,22 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import DayEntry from "./DayEntry.vue";
 import EntryForm from "./EntryForm.vue";
 import FilterSortBar from "./FilterSortBar.vue";
 import Counter from "./Counter.vue";
+import Greeting from "./Greeting.vue";
 import firebase, { db, ui } from "./../firebase";
+import store from "./../store";
 export default {
   name: "Dashboard",
   components: {
     DayEntry,
     EntryForm,
     FilterSortBar,
-    Counter
+    Counter,
+    Greeting
   },
   data() {
     return {
@@ -128,6 +137,7 @@ export default {
         callbacks: {
           signInSuccessWithAuthResult(authResults, redirectUrl) {
             self.user = authResults;
+            store.commit("updateUser", authResults);
             return true;
           }
         },
@@ -166,7 +176,7 @@ export default {
     }
   },
   computed: {
-    showEntriesMatchingFilterCritera: function() {
+    showEntriesMatchingFilterCritera() {
       const filterCriteria = [].concat(...this.filters);
       if (this.searchTerm.length > 0 && this.filters.indexOf(this.searchTerm)) {
         filterCriteria.push(this.searchTerm);
@@ -211,7 +221,15 @@ export default {
       } else {
         return this.entries;
       }
-    }
+    },
+    ...mapState({
+      userObj: state => state.user,
+
+      userName: state => {
+        console.log("in username", state.user);
+        return state.user.displayName;
+      }
+    })
   }
 };
 </script>
@@ -227,13 +245,14 @@ h1 {
   flex-wrap: wrap;
 }
 
-header {
+.header-bottom {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
 }
 
 .non-auth {
+  display: flex;
   flex-direction: column;
   align-items: center;
 }

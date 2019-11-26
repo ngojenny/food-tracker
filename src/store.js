@@ -9,7 +9,8 @@ const store = new Vuex.Store({
     todos: [
       {id: 1, text: 'get cereal', done: true},
       {id: 2, text: 'get milk', done: false}
-    ]
+    ],
+    user: null,
   },
   methods: {
     getData() {
@@ -23,6 +24,10 @@ const store = new Vuex.Store({
     // mutations are synchronous transaction
     increment(state, payload) {
       state.count += payload.amount
+    },
+    updateUser(state, payload) {
+      console.log('mutating global state', payload)
+      state.user = payload;
     }
   },
   actions: {
