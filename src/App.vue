@@ -222,7 +222,8 @@ h6 {
   font-family: "Playfair Display", serif;
 }
 
-.btn {
+.btn,
+.firebaseui-idp-list button {
   background: #ffffff;
   border: none;
   padding: 5px 20px;
@@ -230,5 +231,25 @@ h6 {
   border-bottom: 2px solid #fae0d9;
   border-right: 2px solid #ffe7ff;
   border-top: 2px solid #ffe7ff;
+}
+
+.firebaseui-idp-list {
+  padding: 0;
+  list-style: none;
+}
+
+.firebaseui-idp-list img {
+  width: 25px;
+  margin-right: 10px;
+}
+
+.firebaseui-idp-list button {
+  display: flex;
+  align-items: center;
+  padding: 8px 15px;
+}
+
+.firebaseui-idp-text-short {
+  display: none;
 }
 </style>

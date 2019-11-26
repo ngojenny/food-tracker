@@ -1,8 +1,11 @@
 <template>
-  <div class="wrapper">
+  <div v-if="user" class="wrapper">
     <header>
       <h1>Weekly Overview</h1>
-      <button class="btn btn-add" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
+      <div class="btn-container">
+        <button class="btn btn-add" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
+        <button class="btn" v-on:click="logout">Log out</button>
+      </div>
     </header>
     <main>
       <FilterSortBar :entries="entries" @search-query="searchQuery" @add-filters="addFilters" />
@@ -26,13 +29,20 @@
       />
     </main>
   </div>
+  <div v-else class="wrapper">
+    <header class="non-auth">
+      <h1>Food Diary</h1>
+      <p>Find relationships between your food, gut and skin</p>
+      <div class="firebase-list" id="firebaseui-auth-container"></div>
+    </header>
+  </div>
 </template>
 
 <script>
 import DayEntry from "./DayEntry.vue";
 import EntryForm from "./EntryForm.vue";
 import FilterSortBar from "./FilterSortBar.vue";
-import { db, ui } from "./../firebase";
+import firebase, { db, ui } from "./../firebase";
 export default {
   name: "Dashboard",
   components: {
@@ -42,6 +52,7 @@ export default {
   },
   data() {
     return {
+      user: null,
       formVisible: false,
       searchTerm: "",
       filters: [],
@@ -104,10 +115,30 @@ export default {
   mounted: function() {
     this.$nextTick(function() {
       this.getAllEntriesFromDatabase();
-      console.log("ui", ui);
+      this.login();
     });
   },
   methods: {
+    login() {
+      const self = this;
+      const uiConfig = {
+        callbacks: {
+          signInSuccessWithAuthResult(authResults, redirectUrl) {
+            self.user = authResults;
+            return true;
+          }
+        },
+        signInSuccessUrl: "http://localhost:8080/#/",
+        signInOptions: [
+          // List of OAuth providers supported.
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        ]
+      };
+      ui.start("#firebaseui-auth-container", uiConfig);
+    },
+    logout() {
+      this.user = null;
+    },
     getAllEntriesFromDatabase() {
       const entriesRef = db.collection("entries");
 
@@ -191,11 +222,17 @@ h1 {
 .card-container {
   display: flex;
   flex-wrap: wrap;
+  border: 1px solid tomato;
 }
 
 header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+}
+
+.non-auth {
+  flex-direction: column;
+  align-items: center;
 }
 </style>
