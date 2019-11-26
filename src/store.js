@@ -26,7 +26,6 @@ const store = new Vuex.Store({
       state.count += payload.amount
     },
     logUserIn(state, payload) {
-      console.log('mutating global state', payload)
       state.user = payload;
     },
     logUserOut(state) {
@@ -61,9 +60,5 @@ const store = new Vuex.Store({
     }
   }
 })
-
-// store.commit('increment')
-
-console.log(store.state.count);
 
 export default store;

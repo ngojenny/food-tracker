@@ -128,11 +128,9 @@ export default {
   },
   methods: {
     login() {
-      const self = this;
       const uiConfig = {
         callbacks: {
           signInSuccessWithAuthResult(authResults, redirectUrl) {
-            // self.user = authResults;
             store.commit("logUserIn", authResults);
             return true;
           }
@@ -158,15 +156,19 @@ export default {
         });
     },
     getAllEntriesFromDatabase() {
-      const entriesRef = db.collection("entries");
+      const privateEntriesRef = db
+        .collection("users")
+        .doc(this.userUID)
+        .collection("entries");
 
-      entriesRef.get().then(querySnapshot => {
+      privateEntriesRef.get().then(querySnapshot => {
         const databaseEntries = [];
         querySnapshot.forEach(doc => {
           const entry = doc.data();
           entry.id = doc.id;
           databaseEntries.push(entry);
         });
+        console.log("QuerySnapshot", querySnapshot);
         this.entries = databaseEntries;
       });
     },
@@ -230,8 +232,11 @@ export default {
     ...mapMutations(["logUserOut"]),
     ...mapState({
       user: state => {
-        console.log("user mapstate", state.user);
         return state.user;
+      },
+      userUID: state => {
+        console.log("trying to find userUID", state);
+        return state.user.user.uid;
       }
     })
   }

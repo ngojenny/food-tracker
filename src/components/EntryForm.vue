@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import DatePicker from "v-calendar/lib/components/date-picker.umd";
 import { db } from "./../firebase";
 export default {
@@ -70,7 +71,11 @@ export default {
   },
   methods: {
     sendEntry(e) {
-      const entryRef = db.collection("entries").doc();
+      const entryRef = db
+        .collection("users")
+        .doc(this.userUID)
+        .collection("entries")
+        .doc();
 
       const massagedEntry = Object.assign({}, this.currentEntry);
       delete massagedEntry.foodItem;
@@ -85,7 +90,7 @@ export default {
         tags: [],
         notes: ""
       };
-
+      console.log("about to send entry");
       entryRef.set(massagedEntry);
       this.closeModal();
     },
@@ -109,6 +114,14 @@ export default {
     closeModal() {
       this.$emit("close-modal");
     }
+  },
+  computed: {
+    ...mapState({
+      userUID: state => {
+        console.log("state", state);
+        return state.user.user.uid;
+      }
+    })
   }
 };
 </script>
