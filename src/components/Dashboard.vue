@@ -222,7 +222,6 @@ h1 {
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  border: 1px solid tomato;
 }
 
 header {
