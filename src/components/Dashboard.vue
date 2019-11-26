@@ -9,6 +9,7 @@
     </header>
     <main>
       <FilterSortBar :entries="entries" @search-query="searchQuery" @add-filters="addFilters" />
+      <Counter />
       <div class="card-container">
         <!-- need to use something else for key -->
         <DayEntry
@@ -42,13 +43,15 @@
 import DayEntry from "./DayEntry.vue";
 import EntryForm from "./EntryForm.vue";
 import FilterSortBar from "./FilterSortBar.vue";
+import Counter from "./Counter.vue";
 import firebase, { db, ui } from "./../firebase";
 export default {
   name: "Dashboard",
   components: {
     DayEntry,
     EntryForm,
-    FilterSortBar
+    FilterSortBar,
+    Counter
   },
   data() {
     return {
