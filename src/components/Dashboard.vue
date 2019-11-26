@@ -149,7 +149,16 @@ export default {
       ui.start("#firebaseui-auth-container", uiConfig);
     },
     logout() {
-      store.commit("logUserOut");
+      firebase
+        .auth()
+        .signOut()
+        .then(function() {
+          console.log("successfully logging out and updating store");
+          store.commit("logUserOut");
+        })
+        .catch(function(error) {
+          console.log("error", error);
+        });
     },
     getAllEntriesFromDatabase() {
       const entriesRef = db.collection("entries");
