@@ -3,6 +3,9 @@
     <header>
       <div class="header-top">
         <Greeting />
+        <pre>
+          {{userUID}}
+        </pre>
       </div>
       <div class="header-bottom">
         <h1>Weekly Overview</h1>
@@ -14,7 +17,7 @@
     </header>
     <main>
       <FilterSortBar :entries="entries" @search-query="searchQuery" @add-filters="addFilters" />
-      <div class="card-container">
+      <div v-if="showEntriesMatchingFilterCritera.length > 0" class="card-container">
         <!-- need to use something else for key -->
         <DayEntry
           v-for="entry in showEntriesMatchingFilterCritera"
@@ -26,6 +29,9 @@
           :tags="entry.tags"
           :notes="entry.notes"
         />
+      </div>
+      <div v-else class="card-container no-entries">
+        <p>No entries found</p>
       </div>
       <EntryForm
         v-if="formVisible"
@@ -64,74 +70,22 @@ export default {
       formVisible: false,
       searchTerm: "",
       filters: [],
-      entries: [
-        {
-          date: "Jan 1, 2019",
-          foods: [
-            { description: "oatmeal with milk", id: "entry1fooditem1" },
-            { description: "apple", id: "entry1fooditem2" },
-            { description: "cheeseburger", id: "entry1fooditem3" },
-            { description: "chocolate bar", id: "entry1fooditem4" },
-            { description: "spaghetti", id: "entry1fooditem5" }
-          ],
-          gut: "bloated by EOD",
-          skin: "clear",
-          tags: [
-            { description: "bloated", id: "entry1tagitem1" },
-            { description: "clear-skin", id: "entry1tagitem2" }
-          ],
-          notes: "started using new moisturizer"
-        },
-        {
-          date: "Jan 2, 2019",
-          foods: [
-            { description: "eggs and bacon", id: "entry2fooditem1" },
-            { description: "apple", id: "entry2fooditem2" },
-            { description: "kale salad", id: "entry2fooditem3" },
-            { description: "chocolate bar", id: "entry2fooditem4" },
-            { description: "spaghetti", id: "entry2fooditem5" }
-          ],
-          gut: "bloated by EOD",
-          skin: "mild acne",
-          tags: [
-            { description: "bloated", id: "entry2tagitem1" },
-            { description: "clear-skin", id: "entry2tagitem2" }
-          ],
-          notes: ""
-        },
-        {
-          date: "Jan 3, 2019",
-          foods: [
-            { description: "eggs and bacon", id: "entry3fooditem1" },
-            { description: "coffee", id: "entry3fooditem2" },
-            { description: "banana", id: "entry3fooditem3" },
-            { description: "chicken soup", id: "entry3fooditem4" },
-            { description: "chocolate bar", id: "entry3fooditem5" },
-            { description: "salmon and asparagus", id: "entry3fooditem6" }
-          ],
-          gut: "bloated by EOD",
-          skin: "mild acne",
-          tags: [
-            { description: "bloated", id: "entry3tagitem1" },
-            { description: "clear-skin", id: "entry3tagitem2" }
-          ],
-          notes: ""
-        }
-      ]
+      entries: []
     };
   },
   mounted: function() {
     this.$nextTick(function() {
-      this.getAllEntriesFromDatabase();
       this.login();
     });
   },
   methods: {
     login() {
+      const self = this;
       const uiConfig = {
         callbacks: {
-          signInSuccessWithAuthResult(authResults, redirectUrl) {
-            store.commit("logUserIn", authResults);
+          async signInSuccessWithAuthResult(authResults, redirectUrl) {
+            await store.commit("logUserIn", authResults);
+            self.getAllEntriesFromDatabase();
             return true;
           }
         },
@@ -156,22 +110,23 @@ export default {
         });
     },
     getAllEntriesFromDatabase() {
-      const entriesRef = db.collection("entries");
-      // const privateEntriesRef = db
-      //   .collection("users")
-      //   .doc(this.userUID)
-      //   .collection("entries");
+      // const entriesRef = db.collection("entries");
+      const privateEntriesRef = db
+        .collection("users")
+        .doc(this.userUID)
+        .collection("entries");
 
       // console.log(privateEntriesRef);
+      console.log("what is userUID", this.userUID);
 
-      entriesRef.get().then(querySnapshot => {
+      privateEntriesRef.get().then(querySnapshot => {
         const databaseEntries = [];
         querySnapshot.forEach(doc => {
           const entry = doc.data();
           entry.id = doc.id;
           databaseEntries.push(entry);
+          console.log("ENTRY", entry);
         });
-        console.log("QuerySnapshot", querySnapshot);
         this.entries = databaseEntries;
       });
     },
@@ -236,11 +191,11 @@ export default {
     ...mapState({
       user: state => {
         return state.user;
+      },
+      userUID: state => {
+        console.log("trying to find userUID", state.user);
+        return state.user.user.uid;
       }
-      // userUID: state => {
-      //   console.log("trying to find userUID", state);
-      //   return state.user.user.uid;
-      // }
     })
   }
 };
@@ -255,6 +210,10 @@ h1 {
 .card-container {
   display: flex;
   flex-wrap: wrap;
+}
+
+.no-entries p {
+  margin: auto;
 }
 
 .header-bottom {
