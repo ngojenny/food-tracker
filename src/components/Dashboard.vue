@@ -1,56 +1,45 @@
 <template>
-  <div>
-    <div v-if="loading">loading...</div>
-    <div v-if="user" class="wrapper">
-      <header>
-        <div class="header-top">
-          <Greeting />
+  <div class="wrapper">
+    <header>
+      <div class="header-top">
+        <Greeting />
+      </div>
+      <div class="header-bottom">
+        <h1>Weekly Overview</h1>
+        <div class="btn-container">
+          <button class="btn btn-add" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
         </div>
-        <div class="header-bottom">
-          <h1>Weekly Overview</h1>
-          <div class="btn-container">
-            <button class="btn btn-add" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
-            <button class="btn" v-on:click="logout">Log out</button>
-          </div>
-        </div>
-      </header>
-      <main>
-        <FilterSortBar :entries="entries" @search-query="searchQuery" @add-filters="addFilters" />
-        <div v-if="showEntriesMatchingFilterCritera.length > 0" class="card-container">
-          <!-- need to use something else for key -->
-          <DayEntry
-            v-for="entry in showEntriesMatchingFilterCritera"
-            v-bind:key="entry.id"
-            :date="entry.date"
-            :foods="entry.foods"
-            :gut="entry.gut"
-            :skin="entry.skin"
-            :tags="entry.tags"
-            :notes="entry.notes"
-          />
-        </div>
-        <div v-else class="card-container no-entries">
-          <p>No entries found</p>
-        </div>
-        <EntryForm
-          v-if="formVisible"
-          @database-updated="getAllEntriesFromDatabase"
-          @close-modal="toggleEntryForm"
+      </div>
+    </header>
+    <main>
+      <FilterSortBar :entries="entries" @search-query="searchQuery" @add-filters="addFilters" />
+      <div v-if="showEntriesMatchingFilterCritera.length > 0" class="card-container">
+        <!-- need to use something else for key -->
+        <DayEntry
+          v-for="entry in showEntriesMatchingFilterCritera"
+          v-bind:key="entry.id"
+          :date="entry.date"
+          :foods="entry.foods"
+          :gut="entry.gut"
+          :skin="entry.skin"
+          :tags="entry.tags"
+          :notes="entry.notes"
         />
-      </main>
-    </div>
-    <div v-else class="wrapper">
-      <header class="non-auth">
-        <h1>Food Diary</h1>
-        <p>Find relationships between your food, gut and skin</p>
-        <div class="firebase-list" id="firebaseui-auth-container"></div>
-      </header>
-    </div>
+      </div>
+      <div v-else class="card-container no-entries">
+        <p>No entries found</p>
+      </div>
+      <EntryForm
+        v-if="formVisible"
+        @database-updated="getAllEntriesFromDatabase"
+        @close-modal="toggleEntryForm"
+      />
+    </main>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState } from "vuex";
 import DayEntry from "./DayEntry.vue";
 import EntryForm from "./EntryForm.vue";
 import FilterSortBar from "./FilterSortBar.vue";
@@ -67,7 +56,6 @@ export default {
   },
   data() {
     return {
-      loading: false,
       formVisible: false,
       searchTerm: "",
       filters: [],
@@ -76,44 +64,11 @@ export default {
   },
   mounted: function() {
     this.$nextTick(function() {
-      console.log("about to call login");
-      this.promptLogin();
+      console.log("getting all entries");
+      this.getAllEntriesFromDatabase();
     });
   },
   methods: {
-    promptLogin() {
-      const self = this;
-      const uiConfig = {
-        callbacks: {
-          async signInSuccessWithAuthResult(authResults, redirectUrl) {
-            self.loading = true;
-            await store.commit("logUserIn", authResults);
-            self.getAllEntriesFromDatabase();
-            return true;
-          }
-        },
-        signInSuccessUrl: "http://localhost:8080/#/",
-        signInOptions: [
-          // List of OAuth providers supported.
-          firebase.auth.GoogleAuthProvider.PROVIDER_ID
-        ]
-      };
-      ui.start("#firebaseui-auth-container", uiConfig);
-    },
-    logout() {
-      const self = this;
-      firebase
-        .auth()
-        .signOut()
-        .then(async function() {
-          console.log("successfully logging out and updating store");
-          await store.commit("logUserOut");
-          self.promptLogin();
-        })
-        .catch(function(error) {
-          console.log("error", error);
-        });
-    },
     getAllEntriesFromDatabase() {
       const privateEntriesRef = db
         .collection("users")
@@ -128,7 +83,6 @@ export default {
           databaseEntries.push(entry);
         });
         this.entries = databaseEntries;
-        this.loading = false;
       });
     },
     toggleEntryForm() {
@@ -188,11 +142,7 @@ export default {
         return this.entries;
       }
     },
-    ...mapMutations(["logUserOut"]),
     ...mapState({
-      user: state => {
-        return state.user;
-      },
       userUID: state => {
         return state.user.user.uid;
       }
@@ -220,11 +170,5 @@ h1 {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-}
-
-.non-auth {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 </style>
