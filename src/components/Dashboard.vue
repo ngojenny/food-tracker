@@ -1,48 +1,51 @@
 <template>
-  <div v-if="user" class="wrapper">
-    <header>
-      <div class="header-top">
-        <Greeting />
-      </div>
-      <div class="header-bottom">
-        <h1>Weekly Overview</h1>
-        <div class="btn-container">
-          <button class="btn btn-add" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
-          <button class="btn" v-on:click="logout">Log out</button>
+  <div>
+    <div v-if="loading">loading...</div>
+    <div v-if="user" class="wrapper">
+      <header>
+        <div class="header-top">
+          <Greeting />
         </div>
-      </div>
-    </header>
-    <main>
-      <FilterSortBar :entries="entries" @search-query="searchQuery" @add-filters="addFilters" />
-      <div v-if="showEntriesMatchingFilterCritera.length > 0" class="card-container">
-        <!-- need to use something else for key -->
-        <DayEntry
-          v-for="entry in showEntriesMatchingFilterCritera"
-          v-bind:key="entry.id"
-          :date="entry.date"
-          :foods="entry.foods"
-          :gut="entry.gut"
-          :skin="entry.skin"
-          :tags="entry.tags"
-          :notes="entry.notes"
+        <div class="header-bottom">
+          <h1>Weekly Overview</h1>
+          <div class="btn-container">
+            <button class="btn btn-add" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
+            <button class="btn" v-on:click="logout">Log out</button>
+          </div>
+        </div>
+      </header>
+      <main>
+        <FilterSortBar :entries="entries" @search-query="searchQuery" @add-filters="addFilters" />
+        <div v-if="showEntriesMatchingFilterCritera.length > 0" class="card-container">
+          <!-- need to use something else for key -->
+          <DayEntry
+            v-for="entry in showEntriesMatchingFilterCritera"
+            v-bind:key="entry.id"
+            :date="entry.date"
+            :foods="entry.foods"
+            :gut="entry.gut"
+            :skin="entry.skin"
+            :tags="entry.tags"
+            :notes="entry.notes"
+          />
+        </div>
+        <div v-else class="card-container no-entries">
+          <p>No entries found</p>
+        </div>
+        <EntryForm
+          v-if="formVisible"
+          @database-updated="getAllEntriesFromDatabase"
+          @close-modal="toggleEntryForm"
         />
-      </div>
-      <div v-else class="card-container no-entries">
-        <p>No entries found</p>
-      </div>
-      <EntryForm
-        v-if="formVisible"
-        @database-updated="getAllEntriesFromDatabase"
-        @close-modal="toggleEntryForm"
-      />
-    </main>
-  </div>
-  <div v-else class="wrapper">
-    <header class="non-auth">
-      <h1>Food Diary</h1>
-      <p>Find relationships between your food, gut and skin</p>
-      <div class="firebase-list" id="firebaseui-auth-container"></div>
-    </header>
+      </main>
+    </div>
+    <div v-else class="wrapper">
+      <header class="non-auth">
+        <h1>Food Diary</h1>
+        <p>Find relationships between your food, gut and skin</p>
+        <div class="firebase-list" id="firebaseui-auth-container"></div>
+      </header>
+    </div>
   </div>
 </template>
 
@@ -64,6 +67,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       formVisible: false,
       searchTerm: "",
       filters: [],
@@ -82,6 +86,7 @@ export default {
       const uiConfig = {
         callbacks: {
           async signInSuccessWithAuthResult(authResults, redirectUrl) {
+            self.loading = true;
             await store.commit("logUserIn", authResults);
             self.getAllEntriesFromDatabase();
             return true;
@@ -110,14 +115,10 @@ export default {
         });
     },
     getAllEntriesFromDatabase() {
-      // const entriesRef = db.collection("entries");
       const privateEntriesRef = db
         .collection("users")
         .doc(this.userUID)
         .collection("entries");
-
-      // console.log(privateEntriesRef);
-      console.log("what is userUID", this.userUID);
 
       privateEntriesRef.get().then(querySnapshot => {
         const databaseEntries = [];
@@ -127,6 +128,7 @@ export default {
           databaseEntries.push(entry);
         });
         this.entries = databaseEntries;
+        this.loading = false;
       });
     },
     toggleEntryForm() {
