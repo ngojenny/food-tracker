@@ -22,7 +22,6 @@ export default {
         .auth()
         .signOut()
         .then(async function() {
-          console.log("successfully logging out and updating store");
           window.localStorage.removeItem("user");
           await store.commit("logUserOut");
           self.$router.push({ path: `/` });

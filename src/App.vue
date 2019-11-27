@@ -10,7 +10,6 @@ export default {
   name: "App",
   store,
   created() {
-    console.log("when are you called");
     // if there is obj in localstorage, update vuex
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {

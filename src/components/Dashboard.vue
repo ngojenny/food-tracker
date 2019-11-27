@@ -63,7 +63,6 @@ export default {
   },
   mounted: function() {
     this.$nextTick(function() {
-      console.log("getting all entries");
       this.getAllEntriesFromDatabase();
     });
   },
