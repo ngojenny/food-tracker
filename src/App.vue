@@ -8,7 +8,18 @@
 import store from "./store";
 export default {
   name: "App",
-  store
+  store,
+  created() {
+    console.log("when are you called");
+    // if there is obj in localstorage, update vuex
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      store.commit("logUserIn", user);
+    } else {
+      this.$router.push({ path: `/` });
+    }
+    // else redirect them to the homepage so they can log in
+  }
 };
 </script>
 

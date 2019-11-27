@@ -1,40 +1,40 @@
 <template>
-  <div class="wrapper">
-    <header>
-      <div class="header-top">
-        <Greeting />
-      </div>
-      <div class="header-bottom">
-        <h1>Weekly Overview</h1>
-        <div class="btn-container">
-          <button class="btn btn-add" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
+  <div>
+    <Account />
+    <div class="wrapper">
+      <header>
+        <div class="header-bottom">
+          <h1>Weekly Overview</h1>
+          <div class="btn-container">
+            <button class="btn btn-add" type="button" v-on:click="toggleEntryForm">New Entry ✎</button>
+          </div>
         </div>
-      </div>
-    </header>
-    <main>
-      <FilterSortBar :entries="entries" @search-query="searchQuery" @add-filters="addFilters" />
-      <div v-if="showEntriesMatchingFilterCritera.length > 0" class="card-container">
-        <!-- need to use something else for key -->
-        <DayEntry
-          v-for="entry in showEntriesMatchingFilterCritera"
-          v-bind:key="entry.id"
-          :date="entry.date"
-          :foods="entry.foods"
-          :gut="entry.gut"
-          :skin="entry.skin"
-          :tags="entry.tags"
-          :notes="entry.notes"
+      </header>
+      <main>
+        <FilterSortBar :entries="entries" @search-query="searchQuery" @add-filters="addFilters" />
+        <div v-if="showEntriesMatchingFilterCritera.length > 0" class="card-container">
+          <!-- need to use something else for key -->
+          <DayEntry
+            v-for="entry in showEntriesMatchingFilterCritera"
+            v-bind:key="entry.id"
+            :date="entry.date"
+            :foods="entry.foods"
+            :gut="entry.gut"
+            :skin="entry.skin"
+            :tags="entry.tags"
+            :notes="entry.notes"
+          />
+        </div>
+        <div v-else class="card-container no-entries">
+          <p>No entries found</p>
+        </div>
+        <EntryForm
+          v-if="formVisible"
+          @database-updated="getAllEntriesFromDatabase"
+          @close-modal="toggleEntryForm"
         />
-      </div>
-      <div v-else class="card-container no-entries">
-        <p>No entries found</p>
-      </div>
-      <EntryForm
-        v-if="formVisible"
-        @database-updated="getAllEntriesFromDatabase"
-        @close-modal="toggleEntryForm"
-      />
-    </main>
+      </main>
+    </div>
   </div>
 </template>
 
@@ -43,16 +43,15 @@ import { mapState } from "vuex";
 import DayEntry from "./DayEntry.vue";
 import EntryForm from "./EntryForm.vue";
 import FilterSortBar from "./FilterSortBar.vue";
-import Greeting from "./Greeting.vue";
-import firebase, { db, ui } from "./../firebase";
-import store from "./../store";
+import Account from "./Account.vue";
+import { db } from "./../firebase";
 export default {
   name: "Dashboard",
   components: {
     DayEntry,
     EntryForm,
     FilterSortBar,
-    Greeting
+    Account
   },
   data() {
     return {
@@ -70,6 +69,7 @@ export default {
   },
   methods: {
     getAllEntriesFromDatabase() {
+      console.log("what happens on refresh", this.userUID);
       const privateEntriesRef = db
         .collection("users")
         .doc(this.userUID)
@@ -144,6 +144,7 @@ export default {
     },
     ...mapState({
       userUID: state => {
+        console.log("state", state);
         return state.user.user.uid;
       }
     })

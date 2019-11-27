@@ -1,24 +1,18 @@
 <template>
   <div>
-    <!-- if user - render login -->
-    <!-- else render dashboard -->
-
-    <button class="btn" v-on:click="logout">Log out</button>
-    <Dashboard v-if="user" />
-    <Login v-else @promptLogin="promptLogin" />
+    <Login @promptLogin="promptLogin" />
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import firebase, { db, ui } from "./../firebase";
+import firebase, { ui } from "./../firebase";
 import store from "./../store";
 import Login from "./Login.vue";
-import Dashboard from "./Dashboard.vue";
+
 export default {
   components: {
-    Login,
-    Dashboard
+    Login
   },
   data() {
     return {
@@ -33,7 +27,8 @@ export default {
           async signInSuccessWithAuthResult(authResults, redirectUrl) {
             self.loading = true;
             await store.commit("logUserIn", authResults);
-            self.getAllEntriesFromDatabase();
+            window.localStorage.setItem("user", JSON.stringify(authResults));
+            self.$router.push({ path: `/${self.userUID}` });
             return true;
           }
         },
@@ -44,20 +39,6 @@ export default {
         ]
       };
       ui.start("#firebaseui-auth-container", uiConfig);
-    },
-    logout() {
-      const self = this;
-      firebase
-        .auth()
-        .signOut()
-        .then(async function() {
-          console.log("successfully logging out and updating store");
-          await store.commit("logUserOut");
-          self.promptLogin();
-        })
-        .catch(function(error) {
-          console.log("error", error);
-        });
     }
   },
   computed: {
