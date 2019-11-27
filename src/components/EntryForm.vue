@@ -90,7 +90,6 @@ export default {
         tags: [],
         notes: ""
       };
-      console.log("about to send entry");
       entryRef.set(massagedEntry);
       this.closeModal();
     },
@@ -118,7 +117,6 @@ export default {
   computed: {
     ...mapState({
       userUID: state => {
-        console.log("state", state);
         return state.user.user.uid;
       }
     })

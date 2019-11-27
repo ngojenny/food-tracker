@@ -1,5 +1,24 @@
 <template>
   <div class="card">
+    <div class="more-actions-container">
+      <button class="btn-more-actions" v-on:click="toggleMoreActionsDropdown">
+        <i class="fas fa-ellipsis-v"></i>
+      </button>
+      <ul v-if="dropdownVisible" class="more-actions-dropdown">
+        <li>
+          <button>
+            Edit
+            <i class="fas fa-edit"></i>
+          </button>
+        </li>
+        <li>
+          <button>
+            Delete
+            <i class="fas fa-trash"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
     <p>
       <span class="entry-label">date:</span>
       {{ formattedDate }}
@@ -34,6 +53,16 @@
 <script>
 export default {
   props: ["date", "foods", "gut", "skin", "tags", "notes"],
+  data() {
+    return {
+      dropdownVisible: false
+    };
+  },
+  methods: {
+    toggleMoreActionsDropdown() {
+      this.dropdownVisible = !this.dropdownVisible;
+    }
+  },
   computed: {
     formattedDate: function() {
       const { date } = this;
@@ -60,6 +89,7 @@ export default {
   padding: 15px;
   width: calc((100% - 40px) / 3);
   margin: 10px;
+  position: relative;
 }
 
 .card:nth-of-type(3n + 1) {
@@ -83,5 +113,46 @@ ul {
 
 ul {
   margin-top: 0;
+}
+
+.more-actions-container {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.btn-more-actions {
+  border: none;
+  background: none;
+}
+
+.fa-ellipsis-v {
+  color: grey;
+}
+
+.more-actions-dropdown {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-align: left;
+  position: absolute;
+  z-index: 10;
+}
+
+.more-actions-dropdown button {
+  background: none;
+  border: none;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.more-actions-dropdown i {
+  margin-left: 10px;
+  font-size: 1.3rem;
+  color: #2c3e50;
 }
 </style>

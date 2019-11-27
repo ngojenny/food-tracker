@@ -14,21 +14,15 @@ export default {
   components: {
     Login
   },
-  data() {
-    return {
-      loading: false
-    };
-  },
   methods: {
     promptLogin() {
       const self = this;
       const uiConfig = {
         callbacks: {
           async signInSuccessWithAuthResult(authResults, redirectUrl) {
-            self.loading = true;
             await store.commit("logUserIn", authResults);
-            window.localStorage.setItem("user", JSON.stringify(authResults));
             self.$router.push({ path: `/${self.userUID}` });
+            window.localStorage.setItem("user", JSON.stringify(authResults));
             return true;
           }
         },

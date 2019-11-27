@@ -68,7 +68,6 @@ export default {
   },
   methods: {
     getAllEntriesFromDatabase() {
-      console.log("what happens on refresh", this.userUID);
       const privateEntriesRef = db
         .collection("users")
         .doc(this.userUID)
@@ -109,7 +108,6 @@ export default {
               return item === entry.id;
             });
             if (itemIndex === -1) {
-              // console.log("not in it");
               for (let key in entry) {
                 if (
                   typeof entry[key] === "string" &&
@@ -143,7 +141,6 @@ export default {
     },
     ...mapState({
       userUID: state => {
-        console.log("state", state);
         return state.user.user.uid;
       }
     })
