@@ -10,11 +10,28 @@
   </div>
 </template>
 <script>
+import { db } from "./../firebase";
 export default {
   methods: {
     confirmAction() {
       console.log("gonna confirm");
-      this.$emit("confirm-action");
+      const entryId = this.$route.params.entryId;
+      const userUID = this.$route.params.id;
+      console.log("is this the entry id?:", entryId);
+      //delete entry on firebase
+      const entryRef = db
+        .collection("users")
+        .doc(userUID)
+        .collection("entries")
+        .doc(entryId);
+      entryRef
+        .delete()
+        .then(() => {
+          this.$router.push(`/${userUID}`);
+        })
+        .catch(function(error) {
+          console.error("Error removing document: ", error);
+        });
     },
     toggleConfirmation() {
       const userUID = this.$route.params.id;
