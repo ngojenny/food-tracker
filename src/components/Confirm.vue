@@ -18,7 +18,6 @@ export default {
       const entryId = this.$route.params.entryId;
       const userUID = this.$route.params.id;
       console.log("is this the entry id?:", entryId);
-      //delete entry on firebase
       const entryRef = db
         .collection("users")
         .doc(userUID)
