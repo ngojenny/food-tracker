@@ -33,6 +33,7 @@
           @database-updated="getAllEntriesFromDatabase"
           @close-modal="toggleEntryForm"
         />
+        <Confirm v-if="confirmVisible" />
       </main>
     </div>
   </div>
@@ -44,6 +45,7 @@ import DayEntry from "./DayEntry.vue";
 import EntryForm from "./EntryForm.vue";
 import FilterSortBar from "./FilterSortBar.vue";
 import Account from "./Account.vue";
+import Confirm from "./Confirm.vue";
 import { db } from "./../firebase";
 export default {
   name: "Dashboard",
@@ -51,7 +53,8 @@ export default {
     DayEntry,
     EntryForm,
     FilterSortBar,
-    Account
+    Account,
+    Confirm
   },
   data() {
     return {
@@ -142,6 +145,9 @@ export default {
     ...mapState({
       userUID: state => {
         return state.user.user.uid;
+      },
+      confirmVisible: state => {
+        return state.deleteEntryConfirmationVisible;
       }
     })
   }

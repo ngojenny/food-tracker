@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import firebase, { ui } from "./../firebase";
+import firebase from "./../firebase";
 import store from "./../store";
 import Greeting from "./Greeting";
 export default {

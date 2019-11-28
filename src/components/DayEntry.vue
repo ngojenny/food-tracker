@@ -6,13 +6,13 @@
       </button>
       <ul v-if="dropdownVisible" class="more-actions-dropdown">
         <li>
-          <button>
+          <button v-on:click.stop="editEntry">
             Edit
             <i class="fas fa-edit"></i>
           </button>
         </li>
         <li>
-          <button>
+          <button v-on:click="toggleConfirmation">
             Delete
             <i class="fas fa-trash"></i>
           </button>
@@ -51,8 +51,14 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+import Confirm from "./Confirm";
+import store from "./../store";
 export default {
   props: ["date", "foods", "gut", "skin", "tags", "notes"],
+  components: {
+    Confirm
+  },
   data() {
     return {
       dropdownVisible: false
@@ -61,6 +67,14 @@ export default {
   methods: {
     toggleMoreActionsDropdown() {
       this.dropdownVisible = !this.dropdownVisible;
+    },
+    editEntry() {
+      console.log("going to edit entry");
+      this.toggleMoreActionsDropdown();
+    },
+    toggleConfirmation() {
+      this.toggleMoreActionsDropdown();
+      store.commit("toggleDeleteEntryConfirmation");
     }
   },
   computed: {
@@ -77,7 +91,8 @@ export default {
       };
       const formattedDate = date.toDate().toLocaleString("en-US", options);
       return formattedDate;
-    }
+    },
+    ...mapMutations(["toggleDeleteEntryConfirmation"])
   }
 };
 </script>
