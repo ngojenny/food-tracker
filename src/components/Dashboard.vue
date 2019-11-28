@@ -23,6 +23,7 @@
             :skin="entry.skin"
             :tags="entry.tags"
             :notes="entry.notes"
+            :id="entry.id"
           />
         </div>
         <div v-else class="card-container no-entries">
@@ -33,7 +34,6 @@
           @database-updated="getAllEntriesFromDatabase"
           @close-modal="toggleEntryForm"
         />
-        <Confirm v-if="confirmVisible" />
       </main>
     </div>
   </div>
@@ -145,9 +145,6 @@ export default {
     ...mapState({
       userUID: state => {
         return state.user.user.uid;
-      },
-      confirmVisible: state => {
-        return state.deleteEntryConfirmationVisible;
       }
     })
   }

@@ -6,7 +6,6 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     user: null,
-    deleteEntryConfirmationVisible: false,
   },
   mutations: {
     logUserIn(state, payload) {
@@ -15,9 +14,6 @@ const store = new Vuex.Store({
     logUserOut(state) {
       state.user = null;
     },
-    toggleDeleteEntryConfirmation(state) {
-      state.deleteEntryConfirmationVisible = !state.deleteEntryConfirmationVisible
-    }
   }
 })
 

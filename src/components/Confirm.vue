@@ -10,8 +10,6 @@
   </div>
 </template>
 <script>
-import { mapMutations } from "vuex";
-import store from "./../store";
 export default {
   methods: {
     confirmAction() {
@@ -19,11 +17,9 @@ export default {
       this.$emit("confirm-action");
     },
     toggleConfirmation() {
-      store.commit("toggleDeleteEntryConfirmation");
+      const userUID = this.$route.params.id;
+      this.$router.push(`/${userUID}`);
     }
-  },
-  computed: {
-    ...mapMutations(["toggleDeleteEntryConfirmation"])
   }
 };
 </script>

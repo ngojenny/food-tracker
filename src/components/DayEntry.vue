@@ -12,7 +12,7 @@
           </button>
         </li>
         <li>
-          <button v-on:click="toggleConfirmation">
+          <button v-on:click="showConfirmation">
             Delete
             <i class="fas fa-trash"></i>
           </button>
@@ -51,11 +51,9 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
 import Confirm from "./Confirm";
-import store from "./../store";
 export default {
-  props: ["date", "foods", "gut", "skin", "tags", "notes"],
+  props: ["date", "foods", "gut", "skin", "tags", "notes", "id"],
   components: {
     Confirm
   },
@@ -72,9 +70,10 @@ export default {
       console.log("going to edit entry");
       this.toggleMoreActionsDropdown();
     },
-    toggleConfirmation() {
+    showConfirmation() {
+      const { fullPath } = this.$route;
+      this.$router.push({ path: `${fullPath}/delete/${this.id}` });
       this.toggleMoreActionsDropdown();
-      store.commit("toggleDeleteEntryConfirmation");
     }
   },
   computed: {
@@ -91,8 +90,7 @@ export default {
       };
       const formattedDate = date.toDate().toLocaleString("en-US", options);
       return formattedDate;
-    },
-    ...mapMutations(["toggleDeleteEntryConfirmation"])
+    }
   }
 };
 </script>
