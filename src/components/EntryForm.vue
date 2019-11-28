@@ -8,7 +8,16 @@
       <label for="foodItem">Food:</label>
       <div v-if="currentEntry.foods.length > 0">
         <ul>
-          <li v-for="food in currentEntry.foods" v-bind:key="food.id">{{food.description}}</li>
+          <li v-for="food in currentEntry.foods" v-bind:key="food.id">
+            {{food.description}}
+            <button
+              type="button"
+              :data-id="food.id"
+              data-collection="foods"
+              v-on:click="removeListItem"
+              class="btn-manage-item"
+            >-</button>
+          </li>
         </ul>
       </div>
       <div class="field-container">
@@ -18,16 +27,30 @@
           v-model="currentEntry.foodItem"
           v-on:keydown.enter="addListItem"
         />
-        <button class="btn-add-item" type="button" v-on:click="addListItem" data-item="foodItem">+</button>
+        <button
+          class="btn-manage-item"
+          type="button"
+          v-on:click="addListItem"
+          data-item="foodItem"
+        >+</button>
       </div>
       <label for="gut">Gut:</label>
-      <input type="text" id="gut" v-model="currentEntry.gut" />
+      <input type="text" id="gut" v-model="currentEntry.gut" v-on:keydown.enter.prevent />
       <label for="skin">Skin:</label>
-      <input type="text" id="skin" v-model="currentEntry.skin" />
+      <input type="text" id="skin" v-model="currentEntry.skin" v-on:keydown.enter.prevent />
       <label for="tags">Tags:</label>
       <div v-if="currentEntry.tags.length > 0">
         <ul>
-          <li v-for="tag in currentEntry.tags" v-bind:key="tag.id">{{tag.description}}</li>
+          <li v-for="tag in currentEntry.tags" v-bind:key="tag.id">
+            {{tag.description}}
+            <button
+              type="button"
+              :data-id="tag.id"
+              data-collection="tags"
+              v-on:click="removeListItem"
+              class="btn-manage-item"
+            >-</button>
+          </li>
         </ul>
       </div>
       <div class="field-container">
@@ -37,10 +60,10 @@
           v-model="currentEntry.tagItem"
           v-on:keydown.enter="addListItem"
         />
-        <button class="btn-add-item" type="button" v-on:click="addListItem" data-item="tagItem">+</button>
+        <button class="btn-manage-item" type="button" v-on:click="addListItem" data-item="tagItem">+</button>
       </div>
       <label for="note">Note:</label>
-      <input type="text" id="note" v-model="currentEntry.notes" />
+      <input type="text" id="note" v-model="currentEntry.notes" v-on:keydown.enter.prevent />
       <button class="btn" type="submit">Submit</button>
     </form>
   </div>
@@ -109,6 +132,22 @@ export default {
       this.currentEntry[pluralKey].push(itemObj);
 
       this.currentEntry[item] = "";
+    },
+    removeListItem(e) {
+      const itemId = e.target.dataset.id;
+      const collection = e.target.dataset.collection;
+      console.log("removing item", itemId, this.currentEntry.foods);
+      const targetCollection = this.currentEntry[collection];
+      console.log("what is target", targetCollection);
+      const newCollection = targetCollection.filter(item => {
+        console.log("item", item);
+        return item.id !== parseInt(itemId);
+      });
+
+      console.log("what is newCollection", newCollection);
+
+      this.currentEntry[collection] = newCollection;
+      console.log("what are you", this.currentEntry);
     },
     closeModal() {
       this.$emit("close-modal");
@@ -189,7 +228,7 @@ input {
   width: 100%;
 }
 
-.btn-add-item {
+.btn-manage-item {
   border: none;
   background: none;
   margin-left: 5px;
