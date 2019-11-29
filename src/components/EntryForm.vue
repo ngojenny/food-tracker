@@ -136,18 +136,12 @@ export default {
     removeListItem(e) {
       const itemId = e.target.dataset.id;
       const collection = e.target.dataset.collection;
-      console.log("removing item", itemId, this.currentEntry.foods);
       const targetCollection = this.currentEntry[collection];
-      console.log("what is target", targetCollection);
       const newCollection = targetCollection.filter(item => {
-        console.log("item", item);
         return item.id !== parseInt(itemId);
       });
 
-      console.log("what is newCollection", newCollection);
-
       this.currentEntry[collection] = newCollection;
-      console.log("what are you", this.currentEntry);
     },
     closeModal() {
       this.$emit("close-modal");
